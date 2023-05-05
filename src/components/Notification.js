@@ -1,24 +1,31 @@
+import PropTypes from 'prop-types'
+
 const Notification = ({ message, type }) => {
   if (message === '') {
-    return null;
+    return null
   }
   else {
     const cssStyle = {
       fontSize: 20,
-      borderStyle: "solid",
+      borderStyle: 'solid',
       borderRadius: 5,
       padding: 10,
       marginBottom: 10,
-      background: "lightgrey",
-      color: type === 'error' ? "red" : "green"
+      background: 'lightgrey',
+      color: type === 'error' ? 'red' : 'green'
     }
 
     return (
       <div style={cssStyle}>
         {message}
       </div>
-    );
+    )
   }
 }
 
-export default Notification;
+Notification.propTypes = {
+  message: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['','error','success']).isRequired
+}
+
+export default Notification

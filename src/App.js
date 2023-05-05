@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 
 import Notification from './components/Notification'
 import Blog from './components/Blog'
-import BlogCreationForm from "./components/BlogCreation"
-import Togglable from "./components/Togglable"
+import BlogCreationForm from './components/BlogCreation'
+import Togglable from './components/Togglable'
 import LoginForm from './components/Login'
 
 import blogService from './services/blogs'
@@ -11,13 +11,13 @@ import loginService from './services/login'
 
 
 const App = () => {
-  const defaultMsg = { text: '', type: '' };
+  const defaultMsg = { text: '', type: '' }
 
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [msg, setMsg] = useState(defaultMsg);
+  const [msg, setMsg] = useState(defaultMsg)
 
   const createBlogRef = useRef()
 
