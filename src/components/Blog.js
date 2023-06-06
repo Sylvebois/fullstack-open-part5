@@ -42,7 +42,7 @@ const Blog = ({ blog, username, addLike, delBlog }) => {
       <button onClick={() => setVisible(!visible)}>
         {visible ? 'hide' : 'show'}
       </button>
-      <div style={visibilitySwitch}>
+      <div style={visibilitySwitch} className='switchable-content'>
         Author: {blog.author === '' ? 'Unknown' : blog.author}<br />
         URL: <a href={blog.url}>{blog.url}</a><br />
         Likes: {blog.likes} <button onClick={handleAddClick}>like</button><br />
