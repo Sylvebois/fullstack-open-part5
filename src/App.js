@@ -36,6 +36,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+
+      const newMsg = { text: 'Successfully logged in', type: 'success' }
+      setMsg(newMsg)
+      setTimeout(() => setMsg(defaultMsg), 5000)
     }
     catch (err) {
       const newMsg = { text: err.response.data.error, type: 'error' }

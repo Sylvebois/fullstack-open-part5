@@ -16,7 +16,7 @@ const Notification = ({ message, type }) => {
     }
 
     return (
-      <div style={cssStyle}>
+      <div style={cssStyle} className={type}>
         {message}
       </div>
     )
@@ -25,7 +25,7 @@ const Notification = ({ message, type }) => {
 
 Notification.propTypes = {
   message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['','error','success']).isRequired
+  type: PropTypes.oneOf(['', 'error', 'success']).isRequired
 }
 
 export default Notification

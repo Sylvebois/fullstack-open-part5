@@ -24,7 +24,7 @@ const LoginForm = ({ username, password, handleUsername, handlePassword, handleC
           />
         </div>
         <div>
-          <button type="submit" onClick={handleClick}>Login</button>
+          <button id="loginButton" type="submit" onClick={handleClick}>Login</button>
         </div>
       </form>
     </>
