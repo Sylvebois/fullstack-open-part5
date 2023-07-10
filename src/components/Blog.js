@@ -45,7 +45,7 @@ const Blog = ({ blog, username, addLike, delBlog }) => {
       <div style={visibilitySwitch} className='switchable-content'>
         Author: {blog.author === '' ? 'Unknown' : blog.author}<br />
         URL: <a href={blog.url}>{blog.url}</a><br />
-        Likes: {blog.likes} <button onClick={handleAddClick}>like</button><br />
+        Likes: <span className='like-counter'>{blog.likes}</span> <button onClick={handleAddClick}>like</button><br />
         Created by: {blog.user.username}<br />
         {
           username === blog.user.username ?

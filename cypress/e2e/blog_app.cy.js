@@ -1,12 +1,22 @@
 describe('Blog App', function () {
   beforeEach(async function () {
-    const defaultUser = {
+    const defaultUsers = [{
       username: 'root',
       name: 'Superuser',
       password: 'salainen'
-    }
+    },
+    {
+      username: 'test',
+      name: 'Supertest',
+      password: 'testing'
+    }]
+
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    cy.request('POST', 'http://localhost:3003/api/users', defaultUser)
+
+    for (const user of defaultUsers) {
+      cy.request('POST', 'http://localhost:3003/api/users', user)
+    }
+
     cy.visit('http://localhost:3000')
 
     await new Promise(r => setTimeout(r, 1000))
@@ -38,13 +48,23 @@ describe('Blog App', function () {
 
   describe('When logged in', function () {
     beforeEach(function () {
-      const defaultBlog = {
+      const defaultBlogs = [{
         title: 'React patterns',
         author: 'Michael Chan',
         url: 'https://reactpatterns.com/'
-      }
+      },
+      {
+        title: 'Another Test',
+        author: 'MM Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 5
+      }]
+
       cy.login({ username: 'root', password: 'salainen' })
-      cy.createBlog(defaultBlog)
+
+      for(const blog of defaultBlogs) {
+        cy.createBlog(blog) 
+      }
     })
 
     it('Can create a blog', function () {
@@ -66,8 +86,29 @@ describe('Blog App', function () {
       cy.get('div em').contains(newBlog.title)
     })
 
-    /*it.only('Can like a blog', function () {
-      cy.get('div em > button').contains('show')
-    })*/
+    it('Can like a blog', function () {
+      cy.get('div em + button').contains('show').click()
+      cy.get('div.switchable-content').as('theContent')
+      cy.get('@theContent').contains('like').click()
+      cy.get('@theContent').find('.like-counter').should('contain', '1')
+    })
+
+    it('The owner can delete his blog', function () {
+      cy.get('div em + button').contains('show').click()
+      cy.get('div.switchable-content').should('contain', 'root')
+      cy.get('div.switchable-content:first button:last').should('contain', 'remove').click()
+      cy.get('div.success').then(() => cy.contains('Successfully'))
+    })
+
+    it('Only the owner can see the remove button', function () {
+      cy.get('div em + button').contains('show').click()
+      cy.get('div.switchable-content button:last').should('contain', 'remove')
+      cy.get('button').contains('logout').click()
+
+      cy.login({ username: 'test', password: 'testing' })
+
+      cy.get('div em + button').contains('show').click()
+      cy.get('div.switchable-content button:last').should('contain', 'like')
+    })
   })
 })
