@@ -58,13 +58,16 @@ describe('Blog App', function () {
         author: 'MM Chan',
         url: 'https://reactpatterns.com/',
         likes: 5
+      },
+      {
+        title: 'E2E Testing for noobs',
+        author: 'MeMeMe',
+        url: 'https://reactpatterns.com/',
+        likes: 2
       }]
 
       cy.login({ username: 'root', password: 'salainen' })
-
-      for(const blog of defaultBlogs) {
-        cy.createBlog(blog) 
-      }
+      cy.createMultipleBlogs(defaultBlogs)
     })
 
     it('Can create a blog', function () {
@@ -109,6 +112,20 @@ describe('Blog App', function () {
 
       cy.get('div em + button').contains('show').click()
       cy.get('div.switchable-content button:last').should('contain', 'like')
+    })
+
+    it.only('Blogs are ordered by likes', function () {
+      cy.get('div em').eq(0).should('contain', 'Another Test')
+      cy.get('div em').eq(1).should('contain', 'E2E Testing for noobs')
+
+      cy.get('#root > div:nth-child(8)').contains('show').click()
+      cy.get('#root > div:nth-child(8) div.switchable-content button').contains('like').as('like')
+
+      cy.get('@like').click()
+      .then(() => cy.get('@like').click())
+      .then(() => cy.get('@like').click())
+
+      cy.get('div em').eq(1).should('contain', 'React patterns')
     })
   })
 })

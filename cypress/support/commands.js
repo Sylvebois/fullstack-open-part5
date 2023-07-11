@@ -43,3 +43,18 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
 
   cy.visit('http://localhost:3000')
 })
+
+Cypress.Commands.add('createMultipleBlogs', (blogs) => {
+  for(const blog of blogs) {
+    cy.request({
+      url: 'http://localhost:3003/api/blogs',
+      method: 'POST',
+      body: { ...blog },
+      headers: {
+        'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
+      }
+    })
+  }
+
+  cy.visit('http://localhost:3000')
+})
