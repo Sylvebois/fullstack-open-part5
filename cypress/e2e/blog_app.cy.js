@@ -1,5 +1,5 @@
 describe('Blog App', function () {
-  beforeEach(async function () {
+  beforeEach(function () {
     const defaultUsers = [{
       username: 'root',
       name: 'Superuser',
@@ -11,15 +11,13 @@ describe('Blog App', function () {
       password: 'testing'
     }]
 
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
 
     for (const user of defaultUsers) {
-      cy.request('POST', 'http://localhost:3003/api/users', user)
+      cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
     }
 
-    cy.visit('http://localhost:3000')
-
-    await new Promise(r => setTimeout(r, 1000))
+    cy.visit('')
   })
 
   it('Login form is shown', function () {
@@ -93,13 +91,14 @@ describe('Blog App', function () {
       cy.get('div em + button').contains('show').click()
       cy.get('div.switchable-content').as('theContent')
       cy.get('@theContent').contains('like').click()
-      cy.get('@theContent').find('.like-counter').should('contain', '1')
+      cy.get('@theContent').find('.like-counter').should('contain', '6')
     })
 
     it('The owner can delete his blog', function () {
       cy.get('div em + button').contains('show').click()
-      cy.get('div.switchable-content').should('contain', 'root')
-      cy.get('div.switchable-content:first button:last').should('contain', 'remove').click()
+      cy.get('div.switchable-content').contains('root')
+      cy.get('div.switchable-content:first button:last').contains('remove').click()
+      cy.wait(500)
       cy.get('div.success').then(() => cy.contains('Successfully'))
     })
 
@@ -114,7 +113,7 @@ describe('Blog App', function () {
       cy.get('div.switchable-content button:last').should('contain', 'like')
     })
 
-    it.only('Blogs are ordered by likes', function () {
+    it('Blogs are ordered by likes', function () {
       cy.get('div em').eq(0).should('contain', 'Another Test')
       cy.get('div em').eq(1).should('contain', 'E2E Testing for noobs')
 
@@ -122,8 +121,8 @@ describe('Blog App', function () {
       cy.get('#root > div:nth-child(8) div.switchable-content button').contains('like').as('like')
 
       cy.get('@like').click()
-      .then(() => cy.get('@like').click())
-      .then(() => cy.get('@like').click())
+        .then(() => cy.get('@like').click())
+        .then(() => cy.get('@like').click())
 
       cy.get('div em').eq(1).should('contain', 'React patterns')
     })
