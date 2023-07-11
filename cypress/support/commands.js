@@ -24,16 +24,16 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('login', ({ username, password }) => {
-  cy.request('POST', 'http://localhost:3003/api/login', { username, password })
+  cy.request('POST', `${Cypress.env('BACKEND')}/login`, { username, password })
     .then(({ body }) => {
       localStorage.setItem('loggedUser', JSON.stringify(body))
-      cy.visit('http://localhost:3000')
+      cy.visit('')
     })
 })
 
 Cypress.Commands.add('createBlog', ({ title, author, url }) => {
   cy.request({
-    url: 'http://localhost:3003/api/blogs',
+    url: `${Cypress.env('BACKEND')}/blogs`,
     method: 'POST',
     body: { title, author, url },
     headers: {
@@ -41,13 +41,13 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
     }
   })
 
-  cy.visit('http://localhost:3000')
+  cy.visit('')
 })
 
 Cypress.Commands.add('createMultipleBlogs', (blogs) => {
   for(const blog of blogs) {
     cy.request({
-      url: 'http://localhost:3003/api/blogs',
+      url: `${Cypress.env('BACKEND')}/blogs`,
       method: 'POST',
       body: { ...blog },
       headers: {
@@ -56,5 +56,5 @@ Cypress.Commands.add('createMultipleBlogs', (blogs) => {
     })
   }
 
-  cy.visit('http://localhost:3000')
+  cy.visit('')
 })
